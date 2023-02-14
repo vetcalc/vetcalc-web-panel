@@ -39,6 +39,7 @@ function DrugTable() {
   return (
     <div className="ui container">
       <Header></Header>
+      <a href="javascript: history.go(-1)">Go Back</a>
       <h1>{animal}</h1>
       <AddDrug addDrugHandler={addDrugHandler}> </AddDrug>
       <DrugList drugs={animalDrugs} deleteDrugHandler={removeDrugHandler}></DrugList>
