@@ -6,6 +6,7 @@ import Header from "./header";
 import AddDrug from "./addDrug";
 import DrugList from "./drugList";
 import { useParams } from 'react-router-dom';
+import { textTransform } from '@mui/system';
 
 function DrugTable() {
   let {animal}=useParams()

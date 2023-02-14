@@ -4,8 +4,8 @@ import './App.css';
 import Header from "./header";
 import DrugList from './drugList';
 import DropdownAnimalSearchQuery from './animalList';
-import { Button } from 'semantic-ui-react';
-//import value from DropdownAnimalSearchQuery;
+import { Button, Grid, GridColumn } from 'semantic-ui-react';
+
 
 function App() {
   const LOCAL_STORAGE_KEY = "drugs";
@@ -34,14 +34,19 @@ function App() {
     <div className="ui container">
       <Header></Header>
       <DropdownAnimalSearchQuery>  </DropdownAnimalSearchQuery>
-      <Button basic color='violet' href='/drugs/cat'>Cat</Button>
-      <Button basic color='violet' href='/drugs/camelid'>Camelid</Button>
-      <Button basic color='violet' href='/drugs/cattle'>Cattle</Button>
-      <Button basic color='violet' href='/drugs/dog'>Dog</Button>
-      <Button basic color='violet' href='/drugs/equine'>Equine</Button>
-      <Button basic color='violet' href='/drugs/goat_sheep'>Goat/Sheep</Button>
-      <Button basic color='violet' href='/drugs/swine'>Swine</Button>
-      <Button basic color='violet' href='/drugs'>All</Button>
+      <br/><br/><br/>
+      <Grid>
+        <Grid.Column textAlign="center">
+          <Button basic color='violet' href='/drugs/cat'>Cat</Button>
+          <Button basic color='violet' href='/drugs/camelid'>Camelid</Button>
+          <Button basic color='violet' href='/drugs/cattle'>Cattle</Button>
+          <Button basic color='violet' href='/drugs/dog'>Dog</Button>
+          <Button basic color='violet' href='/drugs/equine'>Equine</Button>
+          <Button basic color='violet' href='/drugs/goat_sheep'>Goat/Sheep</Button>
+          <Button basic color='violet' href='/drugs/swine'>Swine</Button>
+          <Button basic color='violet' href='/drugs'>All</Button>
+        </Grid.Column>
+      </Grid>
     </div>
   );
 };

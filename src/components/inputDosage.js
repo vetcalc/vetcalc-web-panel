@@ -13,11 +13,13 @@ const typeOptions = [
   { key: 'PO', text: 'PO', value: 'PO' },
 ]
 
-const InputDosage = () => (
+const DosageUnit = () => (
   <Input
-    label={<Dropdown defaultValue='mg/ml' options={unitOptions} />}
+    label={<Dropdown defaultValue='mg/kgs' options={unitOptions} />}
     labelPosition='right'
     placeholder='Dosage'
+    // value={(e) => this.setState({ dosage: e.target.value })}
+    
   />
 )
 // (
@@ -29,4 +31,4 @@ const InputDosage = () => (
   
 // )
 
-export default InputDosage
+export default DosageUnit

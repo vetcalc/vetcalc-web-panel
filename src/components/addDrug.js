@@ -1,7 +1,10 @@
 import React from "react";
 import DropdownAnimalSearchQuery from "./animalList";
+import DosageType from "./dosageType";
 import InputConcentration from "./inputConcentration";
+import DosageUnit from "./inputDosage";
 import InputDosage from "./inputDosage";
+import unitOptions from "./inputDosage"
 
 class addDrug extends React.Component {
     state = {
@@ -46,7 +49,7 @@ class addDrug extends React.Component {
                     </div>
                     <div className="field">
                         <label>Concentration</label>
-                        <InputConcentration>
+                        {/* <InputConcentration> */}
                         <input 
                         type="text" 
                         name="concentration" 
@@ -54,11 +57,11 @@ class addDrug extends React.Component {
                         value={this.state.concentration}
                         onChange={(e) => this.setState({ concentration: e.target.value })}>
                         </input>
-                        </InputConcentration>
+                        {/* </InputConcentration> */}
                     </div>
                     <div className="field">
                         <label>Dosage</label>
-                        <InputDosage>
+                        {/* <DosageUnit> */}
                         <input 
                         type="text" 
                         name="dosage" 
@@ -66,7 +69,9 @@ class addDrug extends React.Component {
                         value={this.state.dosage}
                         onChange={(e) => this.setState({ dosage: e.target.value })}>
                         </input>
-                        </InputDosage>
+                        {/* </DosageUnit> */}
+                        
+                        
                     </div>
                     <div className="field">
                         <label>Notes</label>
