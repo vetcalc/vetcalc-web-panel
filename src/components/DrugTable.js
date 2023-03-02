@@ -7,6 +7,7 @@ import AddDrug from "./addDrug";
 import DrugList from "./drugList";
 import { useParams } from 'react-router-dom';
 import { textTransform } from '@mui/system';
+import { Button } from 'semantic-ui-react';
 
 function DrugTable() {
   let {animal}=useParams()
@@ -39,7 +40,7 @@ function DrugTable() {
   return (
     <div className="ui container">
       <Header></Header>
-      <a href="javascript: history.go(-1)">Go Back</a>
+      <Button href="javascript: history.go(-1)">Back</Button>
       <h1>{animal}</h1>
       <AddDrug addDrugHandler={addDrugHandler}> </AddDrug>
       <DrugList drugs={animalDrugs} deleteDrugHandler={removeDrugHandler}></DrugList>
