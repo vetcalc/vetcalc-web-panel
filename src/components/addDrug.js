@@ -1,6 +1,7 @@
 import React from "react";
-import { Form, Input } from "semantic-ui-react";
+import { Dropdown, Form, Input } from "semantic-ui-react";
 import api from "../services/api";
+import axios from 'axios';
 
 // Adds a new drug to the table of a given animal
 class addDrug extends React.Component {
@@ -16,6 +17,11 @@ class addDrug extends React.Component {
         notes: ""
     };
     setState=this.setState.bind(this)
+
+    handleDropdownChange = (e, { value }) => {
+        this.setState({ doseUnit: value });
+      };
+
 
     add = (e) => {
         e.preventDefault();
@@ -37,6 +43,25 @@ class addDrug extends React.Component {
         this.props.addDrugHandler(this.state);
         this.setState({ id: "", name: "", method: "", concentration: "", concentrationUnit: "", doseLow: "", doseHigh: "", dosageUnit: "", notes: "" });
     };
+
+    // Retrieve data from DB using Axios
+    componentDidMount() {
+        // Get unit information
+        axios.get('https://vaddb.liamgombart.com/units')
+          .then(response => {
+            const unitOptions = response.data.map(unit => ({
+                key: unit.unit_id,
+                text: unit.name,
+                value: unit.name
+            }
+            ))
+            this.setState({unitOptions});
+          })
+          .catch(error => {
+            console.error("Error: cannot receive drug data from DB")
+          });
+      }
+
     render() {
         return (
             <div className="ui main">
@@ -76,17 +101,14 @@ class addDrug extends React.Component {
                         onChange={(e) => this.setState({ concentration: e.target.value })}
                     />   
                     <Form.Field
-                        control={Input}
-                        options={[
-                                      { key: 'mg/kg', text: 'mg/kg', value: 'mg/kg' },
-                                      { key: 'µg/kg', text: 'µg/kg', value: 'µg/kg' },
-                                      { key: 'ml/kg', text: 'ml/kg', value: 'ml/kg' },
-                                    ]}
+                        control={Dropdown}
                         name="concentrationUnit"
                         label="Concentration Unit"
                         placeholder="mg/kg"
+                        selection
+                        options={this.state.unitOptions}
                         value={this.state.options}
-                        onChange={(e) => this.setState({ concentrationUnit: e.target.value })}
+                        onChange={this.handleDropdownChange}
                     />
                     </Form.Group>
 
@@ -110,12 +132,14 @@ class addDrug extends React.Component {
                         value={this.state.doseHigh}
                         onChange={(e) => this.setState({ doseHigh: e.target.value })}/>     
                     <Form.Field
-                        control={Input} 
+                        control={Dropdown} 
                         name="doseUnit" 
                         label="Dosage Unit"
                         placeholder="Dosage Unit"
+                        selection
+                        options={this.state.unitOptions}
                         value={this.state.doseUnit}
-                        onChange={(e) => this.setState({ doseUnit: e.target.value })}/>
+                        onChange={this.handleDropdownChange}/>
                     </Form.Group>
                     
                     <Form.Field
