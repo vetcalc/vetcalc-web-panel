@@ -16,6 +16,7 @@ const DrugList = (props) => {
             </DrugCard>
         );
     });
+
     return <Table>
         <Table.Header>
             <Table.Row>
