@@ -46,7 +46,7 @@ export default class DropdownAnimalSearchQuery extends Component {
 
   mapOptions = (animals) => {
     const options = animals.map(animal => ({
-        key: animal.name,
+        key: animal.id,
         text: animal.name,
         value: animal.name,
     }));
