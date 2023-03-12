@@ -42,6 +42,15 @@ class AddDrug extends Component {
         this.setState({optionDose: value})
         // alert(value)
       };
+
+      handleDropdownChangeMethod = (e, { value }) => {
+        this.setState({ methodUnit: value });
+        alert(value)  
+
+        this.setState({methodUnitId: value });
+        // this.setState({optionMethod: value})
+        // alert(value)
+      };
       
 
  
@@ -144,20 +153,20 @@ class AddDrug extends Component {
           });
           
 
-        // // Get method information
-        // api.get('/methods')
-        //   .then(response => {
-        //     const methodOptions = response.data.map(method => ({
-        //         key: method.method_id,
-        //         text: method.name,
-        //         value: method.name
-        //     }
-        //     ))
-        //     this.setState({methodOptions});
-        //   })
-        //   .catch(error => {
-        //     console.error("Error: cannot receive drug data from DB")
-        //   });
+        // Get method information
+        api.get('/methods')
+          .then(response => {
+            const methodOptions = response.data.map(method => ({
+                key: method.method_id,
+                text: method.name,
+                value: method.name
+            }
+            ))
+            this.setState({methodOptions});
+          })
+          .catch(error => {
+            console.error("Error: cannot receive drug data from DB")
+          });
           
       }
 
@@ -178,14 +187,23 @@ class AddDrug extends Component {
                     />
                     
                     <Form.Field
-                        control={Input}
-                        name="method"
-                        label="Method"
-                        placeholder="Method"
-                        className="right aligned"
-                        value={this.state.method}
-                        onChange={(e) => this.setState({ method: e.target.value })}
-                    />
+                      control={Dropdown}
+                      name="methodUnit"
+                      label="Method Unit"
+                      placeholder="IV"
+                      selection
+                      options={this.state.methodOptions || []}
+                      value={this.state.methodUnitId}
+                      onChange={this.handleDropdownChangeMethod}
+                />
+                    {/* //     control={Input}
+                    //     name="method"
+                    //     label="Method"
+                    //     placeholder="Method"
+                    //     className="right aligned"
+                    //     value={this.state.method}
+                    //     onChange={(e) => this.setState({ method: e.target.value })}
+                    //  */}
                     </Form.Group>
 
                     <Form.Group>
