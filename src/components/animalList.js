@@ -1,24 +1,63 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
+import axios from 'axios';
+
+const animalUri = `${process.env.REACT_APP_TLD}/animals`
+
+const getAnimals = async () => {
+    let response = await axios.get(animalUri);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Unable to get ${animalUri}`);
+    }
+  }
 
 // Creates the dropdown component on the homepage for the user to select which animal to view.
-const animals = ["", "Camelid", "Cat", "Cattle", "Dog", "Equine", "Goat/Sheep", "Swine" ];
-const animalOptions = _.map(animals, (animal, index) => ({
-  key: animals[index],
-  text: animal,
-  value: animals[index],
-}))
 
 export default class DropdownAnimalSearchQuery extends Component {
-  state = { searchQuery: '' }
+  state = { 
+    searchQuery: '',
+    selectOptions: [],
+  }
+
+  componentDidMount() {
+    this.setOptions();
+  }
+
+  setOptions = async () => {
+    try {
+      const response = await getAnimals();
+      const options = this.mapOptions(response);
+
+      this.setState({
+        ...this.state,
+        selectOptions: options,
+      })
+
+    } catch (e) {
+      this.setState({
+        ...this.state,
+        selectOptions: [],
+      })
+    
+    }
+  }
+
+  mapOptions = (animals) => {
+    const options = animals.map(animal => ({
+        key: animal.name,
+        text: animal.name,
+        value: animal.name,
+    }));
+
+    return options
+  }
 
   handleChange = (e, { searchQuery, value }) =>{
-    if (value === 'Goat/Sheep') {
-      value = 'goat_sheep'
-    }
-    window.location.href = `/drugs/${value}`
-    this.setState({ searchQuery, value })
+    const encodedValue = encodeURIComponent(value);
+    window.location.href = `/drugs/${encodedValue}`;
+    this.setState({ ...this.state, searchQuery: value });
   }   
 
   handleSearchChange = (e, { searchQuery }) => this.setState({ searchQuery })
@@ -31,7 +70,7 @@ export default class DropdownAnimalSearchQuery extends Component {
         fluid
         onChange={this.handleChange}
         onSearchChange={this.handleSearchChange}
-        options={animalOptions}
+        options={this.state.selectOptions}
         placeholder='Animal'
         search
         searchQuery={searchQuery}
