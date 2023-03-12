@@ -19,54 +19,74 @@ class AddDrug extends Component {
         doseHigh: "",
         dosageUnit: "",
         notes: "",
-        drugIdState: 5,
-        dosageIdState:5,
+        drugIdState: 0,
+        doseUnitId:0,
+        unitId: 0,
+        options:0,
+        
     };
     setState=this.setState.bind(this)
 
     handleDropdownChangeConc = (e, { value }) => {
+
         this.setState({ concentrationUnit: value });
+      // alert(this.state.unitOptions.find(o => o.value ==value)?.key);
+      this.setState({unitId: value });
+      this.setState({options: value})
+      // alert(value);
       };
 
       handleDropdownChangeDose = (e, { value }) => {
-        this.setState({ dosageUnit: value });
+        // this.setState({ dosageUnit: value });
+        this.setState({doseUnitId: value });
+        this.setState({optionDose: value})
+        // alert(value)
+      };
+
+      handleDropdownChangeMethod = (e, { value }) => {
+        this.setState({ methodUnit: value });
+        alert(value)  
+
+        this.setState({methodUnitId: value });
+        // this.setState({optionMethod: value})
+        // alert(value)
       };
       
 
  
     add = (e) => {
         e.preventDefault();
-        alert(this.state.name)
+        // alert(this.state.name)
         api.post('/drugs', {
             Authentication: API_KEY,
             //drug_id: 161,
             name: this.state.name
             
           })
-        //   .then(
-          //   api.get('/drugs')
-          //   .then(response => {
+          .then(
+            api.get('/drugs')
+            .then(response => {
               
-          //   const drugId = Object.values(response.data);
-          //   // this.setState({drugIdState:drugId.pop().drug_id});    
-          //  console.log(response.data) ;
-          //    })
+            const drugId = Object.values(response.data);
+            this.setState({drugIdState:drugId.pop().drug_id});  
+            console.log("the drug list:");    
+            console.log(drugId.pop()) ;
+             })
   
-          //   .catch(error => {
-          //     // console.error("Error: cannot receive drug data from DB")
-          //     console.error(error)
-          //   })
+            .catch(error => {
+              // console.error("Error: cannot receive drug data from DB")
+              // console.error(error)
+            })
 
-        //   );
-         return;
-
+          );
+            alert(this.state.drugIdState)
           api.post('/dosages', {
             Authentication: API_KEY,
             animal_id: 4,       // Needs to come from dropdown list of /animals!
             drug_id:this.state.drugIdState,         // Needs to come from get methods of /drugs!
             dose_low: this.state.doseLow,
             dose_high: this.state.doseHigh,
-            dose_unit_id: this.state.options,  // Needs to come from /units!
+            dose_unit_id: this.state.doseUnitId,  // Needs to come from /units!
             notes: this.state.notes,
           })
           .then(function (response) {
@@ -75,27 +95,27 @@ class AddDrug extends Component {
               
             const dosageId = Object.values(response.data);
             this.setState({dosageIdState:dosageId.pop().dosage_id}); 
-            console.log(this.state.dosageIdState);   
-                     //   alert(this.state.drugIdState)       ;
-             })
-  
-            .catch(error => {
+          
+           console.log("the dosage list:");   
+                      console.log(this.state.dosageId.pop());
+             } )                      
+                    .catch(error => {
               // console.error("Error: cannot receive drug data from DB")
-              console.error(error)
+              // console.error(error)
             })
 
-            console.log(response);
+          //  console.log(response.data);
           })
           .catch(function (error) {
             console.log(error);
           });
 
-
+          return;
           api.post('/concentrations', {
             
             Authentication: API_KEY,
             value: this.state.concentration,
-            unit_id: this.state.options,
+            unit_id: this.state.unitId,
             dosage_id: this.state.dosageIdState             // Needs to come from get from /dosage!
           })
           .then(function (response) {
@@ -123,10 +143,26 @@ class AddDrug extends Component {
             const unitOptions = response.data.map(unit => ({
                 key: unit.unit_id,
                 text: unit.name,
-                value: unit.name
+                value: unit.unit_id
             }
             ))
             this.setState({unitOptions});
+          })
+          .catch(error => {
+            console.error("Error: cannot receive drug data from DB")
+          });
+          
+
+        // Get method information
+        api.get('/methods')
+          .then(response => {
+            const methodOptions = response.data.map(method => ({
+                key: method.method_id,
+                text: method.name,
+                value: method.name
+            }
+            ))
+            this.setState({methodOptions});
           })
           .catch(error => {
             console.error("Error: cannot receive drug data from DB")
@@ -151,14 +187,23 @@ class AddDrug extends Component {
                     />
                     
                     <Form.Field
-                        control={Input}
-                        name="method"
-                        label="Method"
-                        placeholder="Method"
-                        className="right aligned"
-                        value={this.state.method}
-                        onChange={(e) => this.setState({ method: e.target.value })}
-                    />
+                      control={Dropdown}
+                      name="methodUnit"
+                      label="Method Unit"
+                      placeholder="IV"
+                      selection
+                      options={this.state.methodOptions || []}
+                      value={this.state.methodUnitId}
+                      onChange={this.handleDropdownChangeMethod}
+                />
+                    {/* //     control={Input}
+                    //     name="method"
+                    //     label="Method"
+                    //     placeholder="Method"
+                    //     className="right aligned"
+                    //     value={this.state.method}
+                    //     onChange={(e) => this.setState({ method: e.target.value })}
+                    //  */}
                     </Form.Group>
 
                     <Form.Group>
@@ -210,7 +255,7 @@ class AddDrug extends Component {
                         placeholder="Dosage Unit"
                         selection
                         options={this.state.unitOptions || []}
-                        value={this.state.options}
+                        value={this.state.optionDose}
                         onChange={this.handleDropdownChangeDose}/>
                     </Form.Group>
                     
