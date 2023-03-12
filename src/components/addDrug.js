@@ -1,10 +1,14 @@
-import React from "react";
+import {React, useState} from "react";
+import { Component } from "react";
 import { Dropdown, Form, Input } from "semantic-ui-react";
 import api from "../services/api";
 import axios from 'axios';
+import { getValue } from "@testing-library/user-event/dist/utils";
+
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 // Adds a new drug to the table of a given animal
-class addDrug extends React.Component {
+class AddDrug extends Component {
 
     state = {
         name: "",
@@ -14,32 +18,99 @@ class addDrug extends React.Component {
         doseLow: "",
         doseHigh: "",
         dosageUnit: "",
-        notes: ""
+        notes: "",
+        drugIdState: 5,
+        dosageIdState:5,
     };
     setState=this.setState.bind(this)
 
-    handleDropdownChange = (e, { value }) => {
-        this.setState({ doseUnit: value });
+    handleDropdownChangeConc = (e, { value }) => {
+        this.setState({ concentrationUnit: value });
       };
 
+      handleDropdownChangeDose = (e, { value }) => {
+        this.setState({ dosageUnit: value });
+      };
+      
 
+ 
     add = (e) => {
         e.preventDefault();
-        
-        if (this.state.name === "") {
-            alert("Drug field is mandatory!");
-            return;
-        }
+        alert(this.state.name)
         api.post('/drugs', {
-            drug_id: 'drug_id',
+            Authentication: API_KEY,
+            //drug_id: 161,
             name: this.state.name
+            
+          })
+        //   .then(
+          //   api.get('/drugs')
+          //   .then(response => {
+              
+          //   const drugId = Object.values(response.data);
+          //   // this.setState({drugIdState:drugId.pop().drug_id});    
+          //  console.log(response.data) ;
+          //    })
+  
+          //   .catch(error => {
+          //     // console.error("Error: cannot receive drug data from DB")
+          //     console.error(error)
+          //   })
+
+        //   );
+         return;
+
+          api.post('/dosages', {
+            Authentication: API_KEY,
+            animal_id: 4,       // Needs to come from dropdown list of /animals!
+            drug_id:this.state.drugIdState,         // Needs to come from get methods of /drugs!
+            dose_low: this.state.doseLow,
+            dose_high: this.state.doseHigh,
+            dose_unit_id: this.state.options,  // Needs to come from /units!
+            notes: this.state.notes,
+          })
+          .then(function (response) {
+            api.get('/dosages')
+            .then(response => {
+              
+            const dosageId = Object.values(response.data);
+            this.setState({dosageIdState:dosageId.pop().dosage_id}); 
+            console.log(this.state.dosageIdState);   
+                     //   alert(this.state.drugIdState)       ;
+             })
+  
+            .catch(error => {
+              // console.error("Error: cannot receive drug data from DB")
+              console.error(error)
+            })
+
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
+          api.post('/concentrations', {
+            
+            Authentication: API_KEY,
+            value: this.state.concentration,
+            unit_id: this.state.options,
+            dosage_id: this.state.dosageIdState             // Needs to come from get from /dosage!
           })
           .then(function (response) {
             console.log(response);
           })
           .catch(function (error) {
             console.log(error);
-          });
+          });          
+          
+        // //return; 
+        // if (this.state.name === "") {
+        //     alert("Drug field is mandatory!");
+        //     return;
+        // }
+        
         this.props.addDrugHandler(this.state);
         this.setState({ id: "", name: "", method: "", concentration: "", concentrationUnit: "", doseLow: "", doseHigh: "", dosageUnit: "", notes: "" });
     };
@@ -47,7 +118,7 @@ class addDrug extends React.Component {
     // Retrieve data from DB using Axios
     componentDidMount() {
         // Get unit information
-        axios.get('https://vaddb.liamgombart.com/units')
+        api.get('/units')
           .then(response => {
             const unitOptions = response.data.map(unit => ({
                 key: unit.unit_id,
@@ -60,6 +131,7 @@ class addDrug extends React.Component {
           .catch(error => {
             console.error("Error: cannot receive drug data from DB")
           });
+          
       }
 
     render() {
@@ -106,9 +178,9 @@ class addDrug extends React.Component {
                         label="Concentration Unit"
                         placeholder="mg/kg"
                         selection
-                        options={this.state.unitOptions}
+                        options={this.state.unitOptions || []}
                         value={this.state.options}
-                        onChange={this.handleDropdownChange}
+                        onChange={this.handleDropdownChangeConc}
                     />
                     </Form.Group>
 
@@ -133,13 +205,13 @@ class addDrug extends React.Component {
                         onChange={(e) => this.setState({ doseHigh: e.target.value })}/>     
                     <Form.Field
                         control={Dropdown} 
-                        name="doseUnit" 
+                        name="dosageUnit" 
                         label="Dosage Unit"
                         placeholder="Dosage Unit"
                         selection
-                        options={this.state.unitOptions}
-                        value={this.state.doseUnit}
-                        onChange={this.handleDropdownChange}/>
+                        options={this.state.unitOptions || []}
+                        value={this.state.options}
+                        onChange={this.handleDropdownChangeDose}/>
                     </Form.Group>
                     
                     <Form.Field
@@ -158,4 +230,4 @@ class addDrug extends React.Component {
     }
 }
 
-export default addDrug;
+export default AddDrug;
