@@ -8,7 +8,7 @@ import { getValue } from "@testing-library/user-event/dist/utils";
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 // Adds a new drug to the table of a given animal
-class AddDrug extends Component {
+class AddDosage extends Component {
 
     state = {
         name: "",
@@ -40,6 +40,15 @@ class AddDrug extends Component {
         // this.setState({ dosageUnit: value });
         this.setState({doseUnitId: value });
         this.setState({optionDose: value})
+        // alert(value)
+      };
+
+      handleDropdownChangeMethod = (e, { value }) => {
+        this.setState({ methodUnit: value });
+        alert(value)  
+
+        this.setState({methodUnitId: value });
+        // this.setState({optionMethod: value})
         // alert(value)
       };
       
@@ -122,7 +131,7 @@ class AddDrug extends Component {
         //     return;
         // }
         
-        this.props.addDrugHandler(this.state);
+        this.props.addDosageHandler(this.state);
         this.setState({ id: "", name: "", method: "", concentration: "", concentrationUnit: "", doseLow: "", doseHigh: "", dosageUnit: "", notes: "" });
     };
 
@@ -144,27 +153,27 @@ class AddDrug extends Component {
           });
           
 
-        // // Get method information
-        // api.get('/methods')
-        //   .then(response => {
-        //     const methodOptions = response.data.map(method => ({
-        //         key: method.method_id,
-        //         text: method.name,
-        //         value: method.name
-        //     }
-        //     ))
-        //     this.setState({methodOptions});
-        //   })
-        //   .catch(error => {
-        //     console.error("Error: cannot receive drug data from DB")
-        //   });
+        // Get method information
+        api.get('/methods')
+          .then(response => {
+            const methodOptions = response.data.map(method => ({
+                key: method.method_id,
+                text: method.name,
+                value: method.name
+            }
+            ))
+            this.setState({methodOptions});
+          })
+          .catch(error => {
+            console.error("Error: cannot receive drug data from DB")
+          });
           
       }
 
     render() {
         return (
             <div className="ui main">
-                <h2> Add Drug</h2>
+                <h2> Add Dosage</h2>
                 <form className="ui form" onSubmit={this.add}>
                 <Form.Group width="equal">
                     <Form.Field
@@ -178,14 +187,23 @@ class AddDrug extends Component {
                     />
                     
                     <Form.Field
-                        control={Input}
-                        name="method"
-                        label="Method"
-                        placeholder="Method"
-                        className="right aligned"
-                        value={this.state.method}
-                        onChange={(e) => this.setState({ method: e.target.value })}
-                    />
+                      control={Dropdown}
+                      name="methodUnit"
+                      label="Method Unit"
+                      placeholder="IV"
+                      selection
+                      options={this.state.methodOptions || []}
+                      value={this.state.methodUnitId}
+                      onChange={this.handleDropdownChangeMethod}
+                />
+                    {/* //     control={Input}
+                    //     name="method"
+                    //     label="Method"
+                    //     placeholder="Method"
+                    //     className="right aligned"
+                    //     value={this.state.method}
+                    //     onChange={(e) => this.setState({ method: e.target.value })}
+                    //  */}
                     </Form.Group>
 
                     <Form.Group>
@@ -257,4 +275,4 @@ class AddDrug extends Component {
     }
 }
 
-export default AddDrug;
+export default AddDosage;

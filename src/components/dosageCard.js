@@ -1,10 +1,10 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-import EditDrugModal from "./Modal";
+import EditDosageModal from "./Modal";
 
-// Creates the table with the drug information
-const DrugCard = (props) => {
-    const { id, name, method, concentration, concentrationUnit, doseLow, doseHigh, doseUnit, notes } = props.drug;
+// Creates the table with the dosage information
+const DosageCard = (props) => {
+    const { id, name, method, concentration, concentrationUnit, doseLow, doseHigh, doseUnit, notes } = props.dosage;
     return (
         <Table.Row>
                 <Table.Cell>
@@ -33,7 +33,7 @@ const DrugCard = (props) => {
                 </Table.Cell>
 
                 <Table.Cell>
-                <EditDrugModal drug={props.drug} editDrug={props.editDrugHandler}/>              
+                <EditDosageModal drug={props.dosage} editDrug={props.editDosageHandler}/>              
                 </Table.Cell>
                 
                 <Table.Cell>
@@ -47,4 +47,4 @@ const DrugCard = (props) => {
         );
     };
 
-   export default DrugCard
+   export default DosageCard

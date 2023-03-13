@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
-import DrugTable from "./components/DrugTable";
+import DosageTable from "./components/DosageTable";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     path:"/", element:<App />
   },
   {
-    path:"/drugs/:animal", element:<DrugTable />
+    path:"/dosages/:animal", element:<DosageTable />
   }
 ])
 root.render(
