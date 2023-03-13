@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
-import get from '../share/get';
+import get from '../services/get';
 const animalUri = `${process.env.REACT_APP_TLD}/animals`
 
 // Creates the dropdown component on the homepage for the user to select which animal to view.
