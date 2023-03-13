@@ -1,60 +1,84 @@
-import {React, useState} from "react";
-import { Component } from "react";
-import { Dropdown, Form, Input } from "semantic-ui-react";
-import api from "../services/api";
-import axios from 'axios';
-import { getValue } from "@testing-library/user-event/dist/utils";
+import React, {useState, useEffect} from 'react'
+import { Dropdown } from 'semantic-ui-react'
+import get from '../services/get';
+import { AnimalContext } from  '../context/animal_context';
+import { useNavigate } from 'react-router-dom';
 
-
-
-
-export default class DropdownAnimalSearchQuery extends Component {
-  state = { searchQuery: '' }
-  
 // Creates the dropdown component on the homepage for the user to select which animal to view.
-  componentDidMount() {
-    // Get animal information
-    api.get('/animals')
-    .then(response => {
-      const animalOptions = response.data.map(animal => ({
+const animalUri = `${process.env.REACT_APP_TLD}/animals`
+
+const DropdownAnimalSearchQuery = () => {
+  const [state, setState] = useState({
+    value: '',
+    searchQuery: '',
+    options: [],
+  });
+
+  const navigate = useNavigate();
+
+  useEffect( () => {
+    setOptions();
+  }, []);
+
+  const setOptions = async () => {
+    try {
+      const response = await get(animalUri);
+      const options = mapOptions(response);
+
+      setState({
+        ...state,
+        options: options,
+      })
+
+    } catch (e) {
+      setState({
+        ...state,
+        options: [],
+      })
+    
+    }
+  }
+
+  const mapOptions = (animals) => {
+    const options = animals.map(animal => ({
         key: animal.animal_id,
         text: animal.name,
         value: animal.name
       }
       ));
-      this.setState({animalOptions});
-    })
-    .catch(error => {
-      console.error("Error: cannot receive animal data from DB")
-    })
+
+    return options;
   }
+    
+  const handleChange = (e, {searchQuery, value}) => {
+    setState({
+      ...state,
+      searchQuery: searchQuery,
+      value: value,
+    });
+    navigate(`/dosages/${value}`);
+  };   
 
+  const handleSearchChange = (e, { searchQuery }) => {
+    setState({ 
+      ...state,
+      searchQuery: searchQuery 
+    });
+  };
 
-  handleChange = (e, { searchQuery, value }) =>{
-    if (value === 'Goat/Sheep') {
-      value = 'goat_sheep'
-    }
-    window.location.href = `/dosages/${value}`
-    this.setState({ searchQuery, value })
-  }   
-
-  handleSearchChange = (e, { searchQuery }) => this.setState({ searchQuery })
-
-  render() {
-    const { searchQuery, value } = this.state
-
-    return (
-      <Dropdown
-        fluid
-        onChange={this.handleChange}
-        onSearchChange={this.handleSearchChange}
-        options={this.state.animalOptions}
-        placeholder='Animal'
-        search
-        searchQuery={searchQuery}
-        selection
-        value={value}
-      />
-    )
-  }
+  return (
+    <Dropdown
+      fluid
+      onChange={handleChange}
+      onSearchChange={handleSearchChange}
+      options={state.options}
+      placeholder='Animal'
+      search
+      searchQuery={state.searchQuery}
+      selection
+      value={state.value}
+    />
+  )
 }
+
+export default DropdownAnimalSearchQuery;
