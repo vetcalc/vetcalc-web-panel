@@ -2,6 +2,9 @@ import React from 'react';
 import './App.css';
 import Header from "./header";
 import DropdownAnimalSearchQuery from './animalList';
+import axios from 'axios'
+import api from "../services/api";
+import AddAnimal from './addAnimal';
 
 function App() {
   
