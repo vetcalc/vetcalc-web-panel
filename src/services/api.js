@@ -1,7 +1,7 @@
 import axios from "axios";
 // import {serviceOptions} from "./services"
 
-const env = process.env;
+const animalUri = "https://vaddb.liamgombart.com/animals";
 
 const api = axios.create({
   baseURL: env.REACT_APP_TLD,
