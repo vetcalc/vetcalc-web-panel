@@ -36,7 +36,6 @@ export default class DropdownAnimalSearchQuery extends Component {
   }
 
   deleteAnimal = async (animal) => {
-    console.log(animal)
     try {
       await api.delete(`/animals/${animal}`);
       window.location.reload();
