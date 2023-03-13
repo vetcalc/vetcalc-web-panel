@@ -1,72 +1,83 @@
-import React, { Component } from 'react'
+import React, {useState, useEffect} from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import get from '../services/get';
-const animalUri = `${process.env.REACT_APP_TLD}/animals`
+import { AnimalContext } from  '../context/animal_context';
+import { useNavigate } from 'react-router-dom';
 
 // Creates the dropdown component on the homepage for the user to select which animal to view.
+const animalUri = `${process.env.REACT_APP_TLD}/animals`
 
-export default class DropdownAnimalSearchQuery extends Component {
-  state = { 
+const DropdownAnimalSearchQuery = () => {
+  const [state, setState] = useState({
+    value: '',
     searchQuery: '',
-    selectOptions: [],
-  }
+    options: [],
+  });
 
-  componentDidMount() {
-    this.setOptions();
-  }
+  const navigate = useNavigate();
 
-  setOptions = async () => {
+  useEffect( () => {
+    setOptions();
+  }, []);
+
+  const setOptions = async () => {
     try {
       const response = await get(animalUri);
-      const options = this.mapOptions(response);
+      const options = mapOptions(response);
 
-      this.setState({
-        ...this.state,
-        selectOptions: options,
+      setState({
+        ...state,
+        options: options,
       })
 
     } catch (e) {
-      this.setState({
-        ...this.state,
-        selectOptions: [],
+      setState({
+        ...state,
+        options: [],
       })
     
     }
   }
 
-  mapOptions = (animals) => {
+  const mapOptions = (animals) => {
     const options = animals.map(animal => ({
-        key: animal.id,
+        key: animal.animal_id,
         text: animal.name,
         value: animal.name,
     }));
 
     return options
   }
+    
+  const handleChange = (e, {searchQuery, value}) => {
+    setState({
+      ...state,
+      searchQuery: searchQuery,
+      value: value,
+    });
+    navigate(`/dosages/${value}`);
+  };   
 
-  handleChange = (e, { searchQuery, value }) =>{
-    const encodedValue = encodeURIComponent(value);
-    window.location.href = `/dosages/${encodedValue}`;
-    this.setState({ ...this.state, searchQuery: value });
-  }   
+  const handleSearchChange = (e, { searchQuery }) => {
+    setState({ 
+      ...state,
+      searchQuery: searchQuery 
+    });
+  };
 
-  handleSearchChange = (e, { searchQuery }) => this.setState({ searchQuery })
-
-  render() {
-    const { searchQuery, value } = this.state
-
-    return (
-      <Dropdown
-        fluid
-        onChange={this.handleChange}
-        onSearchChange={this.handleSearchChange}
-        options={this.state.selectOptions}
-        placeholder='Animal'
-        search
-        searchQuery={searchQuery}
-        selection
-        value={value}
-      />
-    )
-  }
+  return (
+    <Dropdown
+      fluid
+      onChange={handleChange}
+      onSearchChange={handleSearchChange}
+      options={state.options}
+      placeholder='Animal'
+      search
+      searchQuery={state.searchQuery}
+      selection
+      value={state.value}
+    />
+  )
 }
+
+export default DropdownAnimalSearchQuery;
