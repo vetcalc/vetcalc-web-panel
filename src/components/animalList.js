@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import get from '../services/get';
 import { AnimalContext } from  '../context/animal_context';
@@ -11,10 +11,12 @@ const DropdownAnimalSearchQuery = () => {
   const [state, setState] = useState({
     value: '',
     searchQuery: '',
+    animals: [],
     options: [],
   });
 
   const navigate = useNavigate();
+  const context = useContext(AnimalContext);
 
   useEffect( () => {
     setOptions();
@@ -22,11 +24,12 @@ const DropdownAnimalSearchQuery = () => {
 
   const setOptions = async () => {
     try {
-      const response = await get(animalUri);
-      const options = mapOptions(response);
+      const animals = await get(animalUri);
+      const options = mapOptions(animals);
 
       setState({
         ...state,
+        animals: animals,
         options: options,
       })
 
@@ -49,6 +52,12 @@ const DropdownAnimalSearchQuery = () => {
 
     return options;
   }
+
+
+  const getAnimalByName = (name) => {
+    const animal = state.animals.find(element => element.name === name) ?? {};
+    return animal;
+  }
     
   const handleChange = (e, {searchQuery, value}) => {
     setState({
@@ -56,6 +65,7 @@ const DropdownAnimalSearchQuery = () => {
       searchQuery: searchQuery,
       value: value,
     });
+    context.currentAnimal = getAnimalByName(value);
     navigate(`/dosages/${value}`);
   };   
 
@@ -67,17 +77,17 @@ const DropdownAnimalSearchQuery = () => {
   };
 
   return (
-    <Dropdown
-      fluid
-      onChange={handleChange}
-      onSearchChange={handleSearchChange}
-      options={state.options}
-      placeholder='Animal'
-      search
-      searchQuery={state.searchQuery}
-      selection
-      value={state.value}
-    />
+      <Dropdown
+        fluid
+        onChange={handleChange}
+        onSearchChange={handleSearchChange}
+        options={state.options}
+        placeholder='Animal'
+        search
+        searchQuery={state.searchQuery}
+        selection
+        value={state.value}
+      />
   )
 }
 

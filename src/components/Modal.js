@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Form, Button, Input, Modal, Dropdown } from 'semantic-ui-react'
 import api from "../services/api";
 import axios from 'axios';
@@ -7,7 +7,7 @@ import axios from 'axios';
 // Creates the popup element to edit a particular dosage
 function EditDosageModal({dosage, editDosage}) {
   const [open, setOpen] = React.useState(false)
-  const [dosageValues, setDosageValues] = React.useState(dosage)
+  const [dosageValues, setDosageValues] = useState(dosage)
 
 
   function onSubmit(){

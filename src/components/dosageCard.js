@@ -3,12 +3,12 @@ import { Table } from "semantic-ui-react";
 import EditDosageModal from "./Modal";
 
 // Creates the table with the dosage information
-const DosageCard = (props) => {
-    const { id, name, method, concentration, concentrationUnit, doseLow, doseHigh, doseUnit, notes } = props.dosage;
+const DosageCard = (props) => { 
+    const { id, drugName, method, concentration, dose, notes } = props.dosage.deref;
     return (
         <Table.Row>
                 <Table.Cell>
-                    <div>{name}</div>
+                    <div>{drugName}</div>
                 </Table.Cell>
                 <Table.Cell>
                     <div>{method}</div>
@@ -17,23 +17,13 @@ const DosageCard = (props) => {
                     <div>{concentration}</div>
                 </Table.Cell>
                 <Table.Cell>
-                    <div>{concentrationUnit}</div>
-                </Table.Cell>
-                <Table.Cell>
-                    <div>{doseLow}</div>
-                </Table.Cell>
-                <Table.Cell>
-                    <div>{doseHigh}</div>
-                </Table.Cell>
-                <Table.Cell>
-                    <div>{doseUnit}</div>
+                    <div>{dose}</div>
                 </Table.Cell>
                 <Table.Cell>
                     <div> {notes} </div>
                 </Table.Cell>
-
+                    <EditDosageModal key={id} dosage={props.dosage} editDrug={props.editDosageHandler}/>              
                 <Table.Cell>
-                <EditDosageModal drug={props.dosage} editDrug={props.editDosageHandler}/>              
                 </Table.Cell>
                 
                 <Table.Cell>
@@ -47,4 +37,4 @@ const DosageCard = (props) => {
         );
     };
 
-   export default DosageCard
+export default DosageCard

@@ -1,77 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { v4 as uuid } from "uuid";
+import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
 import Header from "./header";
 import AddDosage from "./addDosage";
 import DosageList from "./dosageList";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import VitalsCard from './vitalsList';
-import get from '../services/get';
-import { useNavigate } from 'react-router-dom';
+import { AnimalContext } from '../context/animal_context';
+import processDosages from '../services/deref';
 
 const dosageUri = `${process.env.REACT_APP_TLD}/dosages`
 
 // Main animal page with add/edit/delete handlers and data for specific animals
 const DosageTable = () => {
   const navigate = useNavigate();
+  const context = useContext(AnimalContext);
 
-  let {animal}=useParams()
-  const LOCAL_STORAGE_KEY = "dosages";
-  const [dosages, setDosages] = useState(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) ?? []
-  );
+  const [dosages, setDosages] = useState({
+    dosages: [],
+  });
+
+  useEffect(() => {
+    getDosages();
+  }, []);
+
 
   const getDosages = async () => {
-    let dosages = await get(`${dosageUri}?animal_id=${animal}`);
-    console.log(dosages[0]);
+    const animal_id = context.currentAnimal.animal_id;
+    const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
+    
+    setDosages({
+      ...dosages, 
+      dosages: newDosages,
+    });
+
   }
 
-  let animalDosages=dosages.filter(d=>d.animal.toLowerCase()===animal.toLowerCase());
-  console.log(animal)
-  console.log(animalDosages);
-  console.log(dosages);
-
-  const addDosageHandler = (dosage) => {
-    console.log(dosage);
-    setDosages([...dosages, { id: uuid(), animal:animal, ...dosage }]);
+    const addDosageHandler = (dosage) => {
+    console.log('adding dosage');
   };
 
   const editDosageHandler = (dosage) => {
-    let newDosages = [...dosages]
-    let index = newDosages.findIndex(d => d.id === dosage.id)
-    if (index < 0) return addDosageHandler(dosage)
-    newDosages[index] = dosage
-    console.log(dosage);
-    setDosages(newDosages);
+    console.log('editing dosage');
+    // let newDosages = [...dosages]
+    // let index = newDosages.findIndex(d => d.id === dosage.id)
+    // if (index < 0) return addDosageHandler(dosage)
+    // newDosages[index] = dosage
+    // console.log(dosage);
+    // setDosages(newDosages);
   };
 
   const removeDosageHandler = (id) => {
-    if (window.confirm("Are you sure you want to delete?") === true){
-    const newDosageList = dosages.filter((dosage) => {
-      return dosage.id !== id;
-    });
+    console.log('removing dosage');
+    // if (window.confirm("Are you sure you want to delete?") === true){
+    // const newDosageList = dosages.filter((dosage) => {
+      // return dosage.id !== id;
+    // });
 
-    setDosages(newDosageList);
-  };
+    // setDosages(newDosageList);
+    //};
   }
 
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dosages));
-  }, [dosages]);
+  const showInfo = async () => {
+    console.log(dosages);
+  }
 
   return (
     <div className="ui container">
       <Header></Header>
       <Button onClick={()=>navigate(-1)}>Back</Button>
-      <h1>{animal}</h1>
+      <h1>{context.currentAnimal.name}</h1>
       <h3>Vitals</h3>
       <VitalsCard></VitalsCard>
-      <h3>Dosage List for {animal}</h3>
-      <DosageList dosages={animalDosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
-      <AddDosage animal={animal} AnimalHandler={addDosageHandler}> </AddDosage> 
+      <h3>Dosage List for {context.currentAnimal.name}</h3>
+      <DosageList dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
+      <AddDosage animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
 
-      <button onClick={getDosages}>Get Dosages</button>
+    <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button>
     </div>
   );
 };
