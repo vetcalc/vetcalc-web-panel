@@ -1,17 +1,7 @@
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
-import axios from 'axios';
-
+import get from '../share/get';
 const animalUri = `${process.env.REACT_APP_TLD}/animals`
-
-const getAnimals = async () => {
-    let response = await axios.get(animalUri);
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(`Unable to get ${animalUri}`);
-    }
-  }
 
 // Creates the dropdown component on the homepage for the user to select which animal to view.
 
@@ -27,7 +17,7 @@ export default class DropdownAnimalSearchQuery extends Component {
 
   setOptions = async () => {
     try {
-      const response = await getAnimals();
+      const response = await get(animalUri);
       const options = this.mapOptions(response);
 
       this.setState({
