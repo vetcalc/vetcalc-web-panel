@@ -7,14 +7,25 @@ import DosageList from "./dosageList";
 import { useParams } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import VitalsCard from './vitalsList';
+import get from '../services/get';
+import { useNavigate } from 'react-router-dom';
+
+const dosageUri = `${process.env.REACT_APP_TLD}/dosages`
 
 // Main animal page with add/edit/delete handlers and data for specific animals
-function DosageTable() {
+const DosageTable = () => {
+  const navigate = useNavigate();
+
   let {animal}=useParams()
   const LOCAL_STORAGE_KEY = "dosages";
   const [dosages, setDosages] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) ?? []
   );
+
+  const getDosages = async () => {
+    let dosages = await get(`${dosageUri}?animal_id=${animal}`);
+    console.log(dosages[0]);
+  }
 
   let animalDosages=dosages.filter(d=>d.animal.toLowerCase()===animal.toLowerCase());
   console.log(animal)
@@ -52,13 +63,15 @@ function DosageTable() {
   return (
     <div className="ui container">
       <Header></Header>
-      <Button href="javascript: history.go(-1)">Back</Button>
+      <Button onClick={()=>navigate(-1)}>Back</Button>
       <h1>{animal}</h1>
       <h3>Vitals</h3>
       <VitalsCard></VitalsCard>
       <h3>Dosage List for {animal}</h3>
       <DosageList dosages={animalDosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
-      <AddDosage animal={animal} AnimalHandler={addDosageHandler}> </AddDosage>      
+      <AddDosage animal={animal} AnimalHandler={addDosageHandler}> </AddDosage> 
+
+      <button onClick={getDosages}>Get Dosages</button>
     </div>
   );
 };
