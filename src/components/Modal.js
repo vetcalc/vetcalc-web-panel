@@ -4,30 +4,30 @@ import api from "../services/api";
 import axios from 'axios';
 
 
-// Creates the popup element to edit a particular drug
-function EditDrugModal({drug, editDrug}) {
+// Creates the popup element to edit a particular dosage
+function EditDosageModal({dosage, editDosage}) {
   const [open, setOpen] = React.useState(false)
-  const [drugValues, setDrugValues] = React.useState(drug)
+  const [dosageValues, setDosageValues] = React.useState(dosage)
 
 
   function onSubmit(){
-    if (drugValues.name === "") {
+    if (dosageValues.name === "") {
         alert("Drug field is mandatory!");
         return;
     }
-    editDrug(drugValues)
+    editDosage(dosageValues)
     setOpen(false)
   }
 
    function handleDropdownChange(value) {
-        this.drugValues({ doseUnit: value, 
+        this.dosageValues({ doseUnit: value, 
                         concentrationUnit: value });
       };
 
   function updateValue(input){
-    let newData = Object.assign({}, drugValues, input)
+    let newData = Object.assign({}, dosageValues, input)
     
-    setDrugValues(newData)
+    setDosageValues(newData)
   }
     
   return (
@@ -48,7 +48,7 @@ function EditDrugModal({drug, editDrug}) {
                     label="Drug Name:   "
                     style= {{width: "700px"}}
                     placeholder="Drug Name"
-                    value={drugValues.name}
+                    value={dosageValues.name}
                     onChange={(e) => updateValue({ name: e.target.value })}
                     />
                     <br/>
@@ -58,7 +58,7 @@ function EditDrugModal({drug, editDrug}) {
                         label="Method:  "
                         placeholder="Method"
                         className="right aligned"
-                        value={drugValues.method}
+                        value={dosageValues.method}
                         onChange={(e) => updateValue({ method: e.target.value })}
                     />
                     </Form.Group>
@@ -70,7 +70,7 @@ function EditDrugModal({drug, editDrug}) {
                         label="Concentration:   "
                         style={{width: 125}}
                         placeholder="Concentration"
-                        value={drugValues.concentration}
+                        value={dosageValues.concentration}
                         onChange={(e) => updateValue({ concentration: e.target.value })}
                     />
                     <br/>
@@ -80,8 +80,8 @@ function EditDrugModal({drug, editDrug}) {
                         label="Concentration Unit"
                         placeholder="mg/kg"
                         selection
-                        options={drugValues.unitOptions}
-                        value={drugValues.options}
+                        options={dosageValues.unitOptions}
+                        value={dosageValues.options}
                         onChange={(e) => handleDropdownChange({ concentrationUnit: e.target.value })}
                     />
                     </Form.Group>
@@ -93,7 +93,7 @@ function EditDrugModal({drug, editDrug}) {
                         name="doseLow"
                         label="Dosage Range:   "
                         placeholder="Dosage Low"
-                        value={drugValues.doseLow}
+                        value={dosageValues.doseLow}
                         onChange={(e) => updateValue({ doseLow: e.target.value })}
                     />
                     <Form.Field>to</Form.Field>
@@ -103,7 +103,7 @@ function EditDrugModal({drug, editDrug}) {
                         name="doseHigh" 
                         label="&nbsp;"
                         placeholder="Dosage High"
-                        value={drugValues.doseHigh}
+                        value={dosageValues.doseHigh}
                         onChange={(e) => updateValue({ doseHigh: e.target.value })}/>
                     
                     <Form.Field
@@ -112,8 +112,8 @@ function EditDrugModal({drug, editDrug}) {
                         label="Dosage Unit"
                         placeholder="Dosage Unit"
                         selection
-                        options={drugValues.unitOptions}
-                        value={drugValues.doseUnit}
+                        options={dosageValues.unitOptions}
+                        value={dosageValues.doseUnit}
                         onChange={(e) => handleDropdownChange({ doseUnit: e.target.value })}
                       />
                     </Form.Group>
@@ -124,7 +124,7 @@ function EditDrugModal({drug, editDrug}) {
                         name="notes"
                         label="Notes:   "
                         placeholder="Notes"
-                        value={drugValues.notes}
+                        value={dosageValues.notes}
                         onChange={(e) => updateValue({ notes: e.target.value })}
                     />
           
@@ -146,4 +146,4 @@ function EditDrugModal({drug, editDrug}) {
   )
 }
 
-export default EditDrugModal
+export default EditDosageModal

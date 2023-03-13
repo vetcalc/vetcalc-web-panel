@@ -46,7 +46,7 @@ export default class DropdownAnimalSearchQuery extends Component {
 
   handleChange = (e, { searchQuery, value }) =>{
     const encodedValue = encodeURIComponent(value);
-    window.location.href = `/drugs/${encodedValue}`;
+    window.location.href = `/dosages/${encodedValue}`;
     this.setState({ ...this.state, searchQuery: value });
   }   
 

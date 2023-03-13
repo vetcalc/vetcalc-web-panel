@@ -1,25 +1,25 @@
 import React from "react";
-import DrugCard from "./drugCard";
+import DosageCard from "./dosageCard";
 import { Table } from 'semantic-ui-react';
 
 // Creates the form for drug data, calling the drug card which fills in the data.
-const DrugList = (props) => {
+const DosageList = (props) => {
     console.log(props);
 
-    const renderDrugList = props.drugs.map((drug) => {    
+    const renderDosageList = props.dosages.map((dosage) => {    
         return (
-            <DrugCard 
-            drug={drug}
-            clickHandler={props.deleteDrugHandler}
-            editDrugHandler={props.editDrugHandler}
-            key={drug.id}>
-            </DrugCard>
+            <DosageCard 
+            dosage={dosage}
+            clickHandler={props.deleteDosageHandler}
+            editDosageHandler={props.editDosageHandler}
+            key={dosage.id}>
+            </DosageCard>
         );
     });
     return <Table>
         <Table.Header>
             <Table.Row>
-                <Table.HeaderCell width={2}>Drug</Table.HeaderCell>
+                <Table.HeaderCell width={2}>Dosage</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='left'>Method</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='left'>Concentration</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='left'>Concentration Unit</Table.HeaderCell>
@@ -32,9 +32,9 @@ const DrugList = (props) => {
             </Table.Row>
         </Table.Header>
         <Table.Body>
-            {renderDrugList}
+            {renderDosageList}
         </Table.Body>
     </Table>;
 };
 
-export default DrugList;
+export default DosageList;

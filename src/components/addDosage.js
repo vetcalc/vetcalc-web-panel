@@ -8,7 +8,7 @@ import { getValue } from "@testing-library/user-event/dist/utils";
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 // Adds a new drug to the table of a given animal
-class AddDrug extends Component {
+class AddDosage extends Component {
 
     state = {
         name: "",
@@ -131,7 +131,7 @@ class AddDrug extends Component {
         //     return;
         // }
         
-        this.props.addDrugHandler(this.state);
+        this.props.addDosageHandler(this.state);
         this.setState({ id: "", name: "", method: "", concentration: "", concentrationUnit: "", doseLow: "", doseHigh: "", dosageUnit: "", notes: "" });
     };
 
@@ -173,7 +173,7 @@ class AddDrug extends Component {
     render() {
         return (
             <div className="ui main">
-                <h2> Add Drug</h2>
+                <h2> Add Dosage</h2>
                 <form className="ui form" onSubmit={this.add}>
                 <Form.Group width="equal">
                     <Form.Field
@@ -275,4 +275,4 @@ class AddDrug extends Component {
     }
 }
 
-export default AddDrug;
+export default AddDosage;
