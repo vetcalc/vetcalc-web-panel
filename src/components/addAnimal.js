@@ -34,6 +34,12 @@ class AddAnimal extends Component {
             respiratory_rate_low: this.state.respiratory_rate_low,
             respiratory_rate_high: this.state.respiratory_rate_high,
         })
+        .then(() => {
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     }
 
     render() {

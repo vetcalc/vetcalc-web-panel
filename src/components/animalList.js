@@ -35,6 +35,16 @@ export default class DropdownAnimalSearchQuery extends Component {
     this.setState({ searchQuery, value })
   }
 
+  deleteAnimal = async (animal) => {
+    console.log(animal)
+    try {
+      await api.delete(`/animals/${animal}`);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   handleSearchChange = (e, { searchQuery }) => this.setState({ searchQuery })
 
   render() {
@@ -49,12 +59,12 @@ export default class DropdownAnimalSearchQuery extends Component {
           {animal.text}
         </a>
           <a href='#' onClick={() => this.handleChange(null, animal)} style={{ marginLeft: '10px' }}>
-            <Button icon color="blue">
+            <Button icon>
               <Icon name='pencil'></Icon>
             </Button>
           </a>
-          <a href='#' onClick={() => this.handleChange(null, animal)} style={{ marginLeft: '10px' }}>
-            <Button icon color="red">
+          <a href='#' onClick={() => this.deleteAnimal(animal.key)} style={{ marginLeft: '10px' }}>
+            <Button icon>
               <Icon name='delete'></Icon>
             </Button>
           </a>
