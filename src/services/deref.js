@@ -1,10 +1,10 @@
 import get from '../services/get';
 
-const drugUri = `${process.env.REACT_APP_TLD}/drugs`
-const unitUri = `${process.env.REACT_APP_TLD}/units`
-const methodUri = `${process.env.REACT_APP_TLD}/methods`
-const concentrationUri = `${process.env.REACT_APP_TLD}/concentrations`
-const deliveryUri = `${process.env.REACT_APP_TLD}/delivery`
+const drugUri = `https://vaddb.liamgombart.com/drugs`
+const unitUri = `https://vaddb.liamgombart.com/units`
+const methodUri = `https://vaddb.liamgombart.com/methods`
+const concentrationUri = `https://vaddb.liamgombart.com/concentrations`
+const deliveryUri = `https://vaddb.liamgombart.com/delivery`
 
 
 const derefById = async (uri, id) => {
