@@ -9,7 +9,7 @@ import VitalsCard from './vitalsList';
 import { AnimalContext } from '../context/animal_context';
 import processDosages from '../services/deref';
 
-const dosageUri = `${process.env.REACT_APP_TLD}/dosages`
+const dosageUri = `https://vaddb.liamgombart.com/dosages`
 
 // Main animal page with add/edit/delete handlers and data for specific animals
 const DosageTable = () => {
