@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: "https://vaddb.liamgombart.com/",
   headers: {
     "Content-Type": "application/json",
-    "Authentication": env.REACT_APP_API_KEY,
+    "Authentication": "simian_army_makes_chaos",
     "Accept": "application/json"
   }, 
 });
