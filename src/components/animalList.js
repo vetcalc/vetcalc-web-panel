@@ -5,7 +5,7 @@ import { AnimalContext } from  '../context/animal_context';
 import { useNavigate } from 'react-router-dom';
 
 // Creates the dropdown component on the homepage for the user to select which animal to view.
-const animalUri = "https://vaddb.liamgombart.com";
+const animalUri = "https://vaddb.liamgombart.com/animals";
 
 const DropdownAnimalSearchQuery = () => {
   const [state, setState] = useState({
