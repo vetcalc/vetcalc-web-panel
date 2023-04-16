@@ -8,6 +8,8 @@ import { Button } from 'semantic-ui-react';
 import VitalsCard from './vitalsList';
 import { AnimalContext } from '../context/animal_context';
 import processDosages from '../services/deref';
+import axios from 'axios';
+import api from '../services/api';
 
 const dosageUri = `https://vaddb.liamgombart.com/dosages`
 
@@ -24,6 +26,7 @@ const DosageTable = () => {
     getDosages();
   }, []);
 
+  
 
   const getDosages = async () => {
     const animal_id = context.currentAnimal.animal_id;
@@ -50,15 +53,53 @@ const DosageTable = () => {
     // setDosages(newDosages);
   };
 
-  const removeDosageHandler = (id) => {
-    console.log('removing dosage');
-    // if (window.confirm("Are you sure you want to delete?") === true){
-    // const newDosageList = dosages.filter((dosage) => {
-      // return dosage.id !== id;
-    // });
+  // const removeDosageHandler = async (id) => {
+  //   console.log('removing dosage');
+  
+  //   // Use the spread operator to create a new array with all the dosages except for the one with the matching `id`
+  //   const updatedDosages = [...dosages].filter((dosage) => dosage.id !== id);
+  
+  //   try {
+  //     await api.delete(`/dosages/${id}`);
+  
+  //     // If the request is successful, update the `dosages` state to reflect the changes
+  //     setDosages(updatedDosages);
+  
+  //     alert("Dosage deleted successfully!");
+  //   } catch (error) {
+  //     alert("Error deleting dosage. Please try again.");
+  //     console.error(error);
+  //   }
+  // };
+  
+  // const removeDosageHandler = (id) => {
+  //   console.log('removing dosage');
+  //   if (window.confirm("Are you sure you want to delete?") === true){
+  //     const newDosageList = dosages.filter((dosage) => {
+  //     return dosage.id !== id;
+  //   });
 
-    // setDosages(newDosageList);
-    //};
+  //   setDosages(newDosageList);
+  //   };
+  // }
+
+  
+  const removeDosageHandler = async (id) => {
+    console.log('removing dosage');
+    console.log(dosages);
+    if (window.confirm("Are you sure you want to delete?") === true){
+      const filterDosage = Object.entries(dosages);
+      const updatedDosages = filterDosage.filter((dosage) => {return dosage.id !== id});
+      // const test = dosages.filter((dosage) => {return dosage.id !== id});
+      console.log(updatedDosages);
+        await api.delete("dosages/"+id);  // request error 400 "bad request"
+        // const arrayDosage = Array.from(updatedDosages);
+        // setDosages(arrayDosage);
+        // await api.delete("dosages", {id:id}); // like in swagger test, always showing "not found"
+      };
+    // const newDosageList = dosages.filter((dosage) => {
+    //   return dosage.id !== id;
+    
   }
 
   const showInfo = async () => {
