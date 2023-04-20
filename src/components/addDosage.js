@@ -5,7 +5,11 @@ import { Dropdown, Form, Input } from "semantic-ui-react";
 import api from "../services/api";
 import axios from 'axios';
 import { getValue } from "@testing-library/user-event/dist/utils";
+import DosageTable from "./DosageTable";
+import { AnimalContext } from "../context/animal_context";
+import processDosages from "../services/deref";
 
+const dosageUri = `https://vaddb.liamgombart.com/dosages`
 const API_KEY = process.env.REACT_APP_API_KEY;
 var drugId2=0;
 var doseId2=0;
@@ -15,6 +19,19 @@ var dosageIdState=0;
 
 // Adds a new drug to the table of a given animal
 class AddDrug extends Component {
+  static contextType = AnimalContext;
+
+  async getDosage(){
+    const animal_id = this.context.currentAnimal;
+    console.log(animal_id);
+    const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
+    this.setState({dosages:newDosages});
+    // setDosages({
+    //   ...dosages, 
+    //   dosages: newDosages,
+   
+    // });
+  }
   
     state = {
         name: "",
@@ -34,6 +51,8 @@ class AddDrug extends Component {
     };
 
     setState=this.setState.bind(this);
+
+    
     
     handleDropdownChangeConc = (e, { value }) => {
 
@@ -197,7 +216,13 @@ class AddDrug extends Component {
     };
 
     // Retrieve data from DB using Axios
-    componentDidMount() {
+    async componentDidMount() {
+      // const animal_id = this.context.currentAnimal;
+      // console.log(animal_id);
+      // const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
+      // this.setState({dosages:newDosages});
+      // console.log(newDosages);
+      
         // Get unit information
         api.get('/units')
           .then(response => {
@@ -228,14 +253,14 @@ class AddDrug extends Component {
           .catch(error => {
             console.error("Error: cannot receive drug data from DB")
           });
-          
+          this.getDosage();
       }
 
     render() {
         return (
 
             <div className="ui main">
-                <h2> Add Drug</h2>
+                <h2> Add New Dosage</h2>
                 <form className="ui form" onSubmit={this.add}>
                 <Form.Group width="equal">
                     <Form.Field
