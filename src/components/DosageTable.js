@@ -25,7 +25,6 @@ const DosageTable = () => {
   useEffect(() => {
     getDosages();
   }, []);
-
   
 
   const getDosages = async () => {
@@ -42,7 +41,7 @@ const DosageTable = () => {
     const addDosageHandler = (dosage) => {
     console.log('adding dosage');
   };
-
+  
   const editDosageHandler = (dosage) => {
     console.log('editing dosage');
     // let newDosages = [...dosages]
@@ -83,18 +82,42 @@ const DosageTable = () => {
   //   };
   // }
 
+  // if (window.confirm("Are you sure you want to delete?") === true){
+  //   const newDrugList = drugs.filter((drug) => {
+  //     return drug.id !== id;
+  //   });
   
   const removeDosageHandler = async (id) => {
     console.log('removing dosage');
-    console.log(dosages);
+    console.log(id);
     if (window.confirm("Are you sure you want to delete?") === true){
-      const filterDosage = Object.entries(dosages);
-      const updatedDosages = filterDosage.filter((dosage) => {return dosage.id !== id});
+      const filterDosage = Object.entries(dosages.dosages);
+      const updatedDosages = dosages.dosages.filter((dosage) => {
+        
+        console.log(dosage.dosage_id);
+  
+        return dosage.dosage_id !== id;
+      });
+
+      const newDosage = [];
+      filterDosage.forEach((item)=>{
+        // console.log(item.dosage_id);
+        newDosage.push(item);
+      });
       // const test = dosages.filter((dosage) => {return dosage.id !== id});
-      console.log(updatedDosages);
+      console.log(filterDosage);
         await api.delete("dosages/"+id);  // request error 400 "bad request"
+        // console.log("Older Dosage: ");
+        // console.log(dosages);
+        // console.log("New Dosage: ");
+        console.log(Object.entries(updatedDosages));
+
         // const arrayDosage = Array.from(updatedDosages);
-        // setDosages(arrayDosage);
+        // setDosages(newDosage);
+        setDosages({
+          ...dosages,
+          dosages: updatedDosages,
+        })
         // await api.delete("dosages", {id:id}); // like in swagger test, always showing "not found"
       };
     // const newDosageList = dosages.filter((dosage) => {
@@ -113,11 +136,11 @@ const DosageTable = () => {
       <h1>{context.currentAnimal.name}</h1>
       <h3>Vitals</h3>
       <VitalsCard></VitalsCard>
-      <h3>Dosage List for {context.currentAnimal.name}</h3>
-      <DosageList dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
       <AddDosage animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
-
-    <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button>
+      <h2>Dosage List for {context.currentAnimal.name}</h2>
+      <DosageList dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
+    {/* <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button> */}
+    <br/>
     </div>
   );
 };
