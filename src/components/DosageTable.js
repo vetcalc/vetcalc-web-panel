@@ -28,13 +28,43 @@ const DosageTable = () => {
   
 
   const getDosages = async () => {
-    const animal_id = context.currentAnimal.animal_id;
-    const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
+    // alert(animal_id);
+    // localStorage.removeItem("animal_id");
+    // return;
+    if(localStorage.getItem("animal_id")){
+
+      const animal_id = localStorage.getItem("animal_id");
+      alert(animal_id);
+      
+      const  newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
+      setDosages({
+        ...dosages, 
+        dosages: newDosages,
+      }); 
+    }
+    else{
+
+      const animal_id = context.currentAnimal.animal_id;
+      const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
+      setDosages({
+        ...dosages, 
+        dosages: newDosages,
+      });
+    }
     
-    setDosages({
-      ...dosages, 
-      dosages: newDosages,
-    });
+   
+
+  }
+
+  const getDosages02 = async () => {
+    // const animal_id = localStorage.getItem("animal_id");
+    // console.log("Animal ID: "+animal_id);
+    // const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
+    
+    // setDosages({
+    //   ...dosages, 
+    //   dosages: newDosages,
+    // });
 
   }
 
@@ -138,7 +168,7 @@ const DosageTable = () => {
       <VitalsCard></VitalsCard>
       <AddDosage animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
       <h2>Dosage List for {context.currentAnimal.name}</h2>
-      <DosageList dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
+      <DosageList getDosages02={getDosages02} dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
     {/* <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button> */}
     <br/>
     </div>

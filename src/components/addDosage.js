@@ -19,6 +19,9 @@ var dosageIdState=0;
 
 // Adds a new drug to the table of a given animal
 class AddDrug extends Component {
+  constructor(props){
+    super(props);
+  }
   static contextType = AnimalContext;
 
   async getDosage(){
@@ -82,7 +85,11 @@ class AddDrug extends Component {
       
       
     add = (e) => {
-
+      const animal_id = this.context.currentAnimal.animal_id;
+     // alert(animal_id);
+      localStorage.setItem("animal_id", this.context.currentAnimal.animal_id);
+      console.log(localStorage.getItem("animal_id"));
+      
       var concentrationValue= this.state.concentration;
       var unitIdValue = this.state.unitId;
       var methodUnitId = this.state.methodUnitId
@@ -253,7 +260,8 @@ class AddDrug extends Component {
           .catch(error => {
             console.error("Error: cannot receive drug data from DB")
           });
-          this.getDosage();
+          // this.getDosage();
+          this.props.getDosages02();
       }
 
     render() {
