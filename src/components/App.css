@@ -37,7 +37,7 @@ h1 {
   background-color: #F9F9F9;
   padding: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   flex-wrap: wrap;
   text-align: end;
 }

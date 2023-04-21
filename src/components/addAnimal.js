@@ -1,9 +1,7 @@
-import {React, useState} from "react";
+import { React } from "react";
 import { Component } from "react";
-import { Dropdown, Form, Input, Label } from "semantic-ui-react";
+import { Form, Input } from "semantic-ui-react";
 import api from "../services/api";
-import axios from 'axios';
-import { getValue } from "@testing-library/user-event/dist/utils";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -56,6 +54,7 @@ class AddAnimal extends Component {
                     placeholder="Animal Name"
                     value={this.state.name}
                     onChange={(e) => this.setState({ name: e.target.value })}
+                    required
                     />
                 </Form.Group>
                 <Form.Group>
@@ -67,6 +66,7 @@ class AddAnimal extends Component {
                     placeholder="Temperature Low"
                     value={this.state.temperature_low}
                     onChange={(e) => this.setState({ temperature_low: e.target.value })}
+                    required
                     />
                 <Form.Field
                     control={Input}
@@ -76,6 +76,7 @@ class AddAnimal extends Component {
                     placeholder="Temperature High"
                     value={this.state.temperature_high}
                     onChange={(e) => this.setState({ temperature_high: e.target.value })}
+                    required
                     />
                 </Form.Group>
                 <Form.Group>
@@ -87,6 +88,7 @@ class AddAnimal extends Component {
                     placeholder="Heart Rate Low"
                     value={this.state.heart_rate_low}
                     onChange={(e) => this.setState({ heart_rate_low: e.target.value })}
+                    required
                     />
                 <Form.Field
                     control={Input}
@@ -96,6 +98,7 @@ class AddAnimal extends Component {
                     placeholder="Heart Rate High"
                     value={this.state.heart_rate_high}
                     onChange={(e) => this.setState({ heart_rate_high: e.target.value })}
+                    required
                     />
                 </Form.Group>
                 <Form.Group>
@@ -107,6 +110,7 @@ class AddAnimal extends Component {
                     placeholder="Respiratory Rate Low"
                     value={this.state.respiratory_rate_low}
                     onChange={(e) => this.setState({ respiratory_rate_low: e.target.value })}
+                    required
                     />
                 <Form.Field
                     control={Input}
@@ -116,6 +120,7 @@ class AddAnimal extends Component {
                     placeholder="Respiratory Rate High"
                     value={this.state.respiratory_rate_high}
                     onChange={(e) => this.setState({ respiratory_rate_high: e.target.value })}
+                    required
                     />
                 </Form.Group>
                 <button className="ui button blue">Add</button>
