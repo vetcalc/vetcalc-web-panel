@@ -14,15 +14,15 @@ const DosageList = (props) => {
             </DosageCard>
         );
     });
-    return <Table>
+    return <Table striped table>
         <Table.Header>
             <Table.Row>
                 <Table.HeaderCell width={2}>Drug</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='left'>Method</Table.HeaderCell>
-                <Table.HeaderCell width={1} textAlign='left'>Concentration</Table.HeaderCell>
-                <Table.HeaderCell width={1} textAlign='left'>Dose</Table.HeaderCell>
+                <Table.HeaderCell width={2} textAlign='left'>Concentration</Table.HeaderCell>
+                <Table.HeaderCell width={2} textAlign='left'>Dose</Table.HeaderCell>
                 <Table.HeaderCell>Notes</Table.HeaderCell>
-                <Table.HeaderCell width={1} textAlign='center'>Edit</Table.HeaderCell>
+                <Table.HeaderCell width={1} textAlign='right'>Edit</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='right'>Remove</Table.HeaderCell>
             </Table.Row>
         </Table.Header>
