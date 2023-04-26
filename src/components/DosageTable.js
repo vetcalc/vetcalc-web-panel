@@ -22,6 +22,8 @@ const DosageTable = () => {
     dosages: [],
   });
 
+  const [vitals, setVitals] = useState(context.currentAnimal);
+
   useEffect(() => {
     getDosages();
   }, []);
@@ -30,31 +32,50 @@ const DosageTable = () => {
   const getDosages = async () => {
     // alert(animal_id);
     // localStorage.removeItem("animal_id");
-    // return;
-    if(localStorage.getItem("animal_id")){
+    var animal_id = 0;
+    var newVitals = null;
+    if(context.currentAnimal.animal_id === undefined){
+      setVitals( JSON.parse(localStorage.getItem("vitals")));
+      animal_id = localStorage.getItem("animal_id");
+      // newVitals = 
+      //localStorage.removeItem("animal_id");
+    //  alert("id st: "+animal_id);
+    }
+    else{
+      // if(localStorage.getItem("animal_id")){
+      //  //localStorage.removeItem("animal_id");       
+      // }
+      animal_id = context.currentAnimal.animal_id;
+      localStorage.setItem("vitals", JSON.stringify(context.currentAnimal));
+      setVitals(context.currentAnimal);
 
-      const animal_id = localStorage.getItem("animal_id");
-      alert(animal_id);
+      console.log("id context: "+animal_id);
+    }
+      
+      // alert("animal_id?"+animal_id);
       
       const  newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
       setDosages({
         ...dosages, 
         dosages: newDosages,
       }); 
+     // setVitals(newVitals);
+      console.log("vitals list updated:",newVitals);
     }
-    else{
+    // else{
 
-      const animal_id = context.currentAnimal.animal_id;
-      const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
-      setDosages({
-        ...dosages, 
-        dosages: newDosages,
-      });
-    }
+    //   const animal_id = context.currentAnimal.animal_id;
+    //   const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
+    //   setDosages({
+    //     ...dosages, 
+    //     dosages: newDosages,
+    //   });
+    //   console.log("dosages list first:",newDosages);
+    // }
     
    
 
-  }
+  
 
   const getDosages02 = async () => {
     // const animal_id = localStorage.getItem("animal_id");
@@ -163,12 +184,12 @@ const DosageTable = () => {
     <div className="ui container">
       <Header></Header>
       <Button onClick={()=>navigate(-1)}>Back</Button>
-      <h1>{context.currentAnimal.name}</h1>
+      <h1>{window.location.pathname.split("/").pop()}</h1>
       <h3>Vitals</h3>
-      <VitalsCard></VitalsCard>
-      <AddDosage animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
+      <VitalsCard currentAnimal={vitals}></VitalsCard>
+      <AddDosage getDosages={getDosages} animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
       <h2>Dosage List for {context.currentAnimal.name}</h2>
-      <DosageList getDosages02={getDosages02} dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
+      <DosageList  dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
     {/* <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button> */}
     <br/>
     </div>
