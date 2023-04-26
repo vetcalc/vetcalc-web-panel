@@ -41,8 +41,8 @@ class AddDrug extends Component {
         method: "",
         concentration: "",
         concentrationUnit: "",
-        doseLow: "",
-        doseHigh: "",
+        doseLow: 0,
+        doseHigh: 0,
         dosageUnit: "",
         notes: "",
         drugIdState: 0,
@@ -85,12 +85,15 @@ class AddDrug extends Component {
       
       
     add = (e) => {
-      const animal_id = this.context.currentAnimal.animal_id;
-     // alert(animal_id);
-      localStorage.setItem("animal_id", this.context.currentAnimal.animal_id);
-      console.log(localStorage.getItem("animal_id"));
       
+  const one  =this.state.doseLow;
+  const two =  this.state.doseHigh;
+  const notes = this.state.notes;
+  // alert(notes);
+  // return;
+      // return;
       var concentrationValue= this.state.concentration;
+
       var unitIdValue = this.state.unitId;
       var methodUnitId = this.state.methodUnitId
       
@@ -112,8 +115,8 @@ class AddDrug extends Component {
                   // drugId2 = drugId.pop().drug_id;
                   //this.setState({drugIdState: drugId.pop().drug_id });  
                   drugIdState = drugId.pop().drug_id ;
-                  console.log("the drug list:");    
-                  console.log(drugId.pop()) ;
+                  // console.log("the drug list:");    
+                  // console.log(drugId.pop()) ;
                   // const result = myClassInstance.myMethod(); // Execute the method
               
                   resolve("ok"); // Resolve the Promise with the result
@@ -122,16 +125,24 @@ class AddDrug extends Component {
                 }
 
               }); 
+// console.log( localStorage.getItem("animal_id"));
+// console.log( this.state.optionDose);
+// console.log("Dose Low: "+one);
+// console.log("Dose High: "+two);
+// console.log(this.state.notes);
+
+// console.log( localStorage.getItem("animal_id"));
+// console.log( localStorage.getItem("animal_id"));
 
             myPromise.then(response => {
                     api.post('/dosages', {
                       Authentication: API_KEY,
-                      animal_id: localStorage.getItem("animalId"),       // Needs to come from dropdown list of /animals!
+                      animal_id: localStorage.getItem("animal_id"),       // Needs to come from dropdown list of /animals!
                       drug_id: drugIdState,         // Needs to come from get methods of /drugs!
-                      dose_low: this.state.doseLow,
-                      dose_high: this.state.doseHigh,
+                      dose_low: one,
+                      dose_high: two,
                       dose_unit_id: this.state.optionDose,  // Needs to come from /units!
-                      notes: this.state.notes,
+                      notes: notes,
                     })
                     .then(function (response) {
                       
@@ -154,7 +165,7 @@ class AddDrug extends Component {
           
                         }); 
                         
-                      alert("the id of the dosage is:"+concentrationValue);
+                      //alert("the id of the dosage is:"+concentrationValue);
                         promiseC.then(response => {
 
                           
@@ -217,10 +228,20 @@ class AddDrug extends Component {
         // //     alert("Drug field is mandatory!");
         // //     return;
         // // }
+        // this.props.getDosages();
+
+       // this.props.addDrugHandler(this.state);
+       //const animal_id = this.context.currentAnimal.animal_id;
+       if (this.context.currentAnimal.animal_id !== undefined){
+        localStorage.setItem("animal_id", this.context.currentAnimal.animal_id);
+       }
         
-        this.props.addDrugHandler(this.state);
+        // console.log(localStorage.getItem("animal_id"));
+       
         this.setState({ id: "", name: "", method: "", concentration: "", concentrationUnit: "", doseLow: "", doseHigh: "", dosageUnit: "", notes: "" });
-    };
+        this.props.getDosages();
+        window.location.href=window.location.href;
+      };
 
     // Retrieve data from DB using Axios
     async componentDidMount() {
@@ -261,7 +282,7 @@ class AddDrug extends Component {
             console.error("Error: cannot receive drug data from DB")
           });
           // this.getDosage();
-          this.props.getDosages02();
+         
       }
 
     render() {
