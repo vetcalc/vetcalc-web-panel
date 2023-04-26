@@ -22,9 +22,10 @@ const DosageCard = (props) => {
                 <Table.Cell>
                     <div> {notes} </div>
                 </Table.Cell>
-                    <EditDosageModal key={id} dosage={props.dosage} editDrug={props.editDosageHandler}/>              
                 <Table.Cell>
+                    <EditDosageModal key={id} dosage={props.dosage} editDrug={props.editDosageHandler}/>              
                 </Table.Cell>
+                
                 
                 <Table.Cell>
                 <i 
