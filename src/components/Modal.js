@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
 import { Form, Button, Input, Modal, Dropdown } from 'semantic-ui-react'
-import api from "../services/api";
-import axios from 'axios';
 
 
 // Creates the popup element to edit a particular dosage
