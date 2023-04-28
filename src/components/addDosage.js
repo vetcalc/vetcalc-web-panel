@@ -1,9 +1,7 @@
-import {React, useState} from "react";
+import { React } from "react";
 import { Component } from "react";
 import { Dropdown, Form, Input } from "semantic-ui-react";
 import api from "../services/api";
-import axios from 'axios';
-import { getValue } from "@testing-library/user-event/dist/utils";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 

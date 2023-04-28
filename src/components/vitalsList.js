@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import api from "../services/api";
-import { useState } from 'react';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
