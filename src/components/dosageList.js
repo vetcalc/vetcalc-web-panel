@@ -15,7 +15,7 @@ const DosageList = (props) => {
         );
     });
     return <Table striped table>
-        <Table.Header>
+        <Table.Header className="vitalsTable">
             <Table.Row>
                 <Table.HeaderCell width={2}>Drug</Table.HeaderCell>
                 <Table.HeaderCell width={1} textAlign='left'>Method</Table.HeaderCell>

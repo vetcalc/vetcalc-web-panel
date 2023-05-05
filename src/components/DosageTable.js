@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
 import Header from "./header";
-import AddDosage from "./addDosage";
+import NewDosage from "./newDosage";
 import DosageList from "./dosageList";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import VitalsCard from './vitalsList';
 import { AnimalContext } from '../context/animal_context';
 import processDosages from '../services/deref';
-import axios from 'axios';
 import api from '../services/api';
 
 const dosageUri = `https://vaddb.liamgombart.com/deref/dosages`
@@ -36,20 +35,14 @@ const DosageTable = () => {
     var newVitals = null;
     if(context.currentAnimal.animal_id === undefined){
       setVitals( JSON.parse(localStorage.getItem("vitals")));
-      animal_id = localStorage.getItem("animal_id");
-      // newVitals = 
-      //localStorage.removeItem("animal_id");
-    //  alert("id st: "+animal_id);
+      animal_id = JSON.parse(localStorage.getItem('currentAnimal')).animal_id
     }
     else{
-      // if(localStorage.getItem("animal_id")){
-      //  //localStorage.removeItem("animal_id");       
-      // }
       animal_id = context.currentAnimal.animal_id;
       localStorage.setItem("vitals", JSON.stringify(context.currentAnimal));
+      localStorage.setItem("currentAnimal", JSON.stringify(context.currentAnimal));
       setVitals(context.currentAnimal);
 
-      console.log("id context: "+animal_id);
     }
       
       // alert("animal_id?"+animal_id);
@@ -60,19 +53,7 @@ const DosageTable = () => {
         dosages: newDosages,
       }); 
      // setVitals(newVitals);
-      console.log("vitals list updated:",newVitals);
     }
-    // else{
-
-    //   const animal_id = context.currentAnimal.animal_id;
-    //   const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);  
-    //   setDosages({
-    //     ...dosages, 
-    //     dosages: newDosages,
-    //   });
-    //   console.log("dosages list first:",newDosages);
-    // }
-    
    
 
   
@@ -185,10 +166,10 @@ const DosageTable = () => {
       <Header></Header>
       <Button onClick={()=>navigate(-1)}>Back</Button>
       <h1>{window.location.pathname.split("/").pop()}</h1>
-      <h3>Vitals</h3>
+      <h3 className='vitalsTable'>Vitals</h3>
       <VitalsCard currentAnimal={vitals}></VitalsCard>
-      <AddDosage getDosages={getDosages} animal={context.currentAnimal.name} AnimalHandler={addDosageHandler}> </AddDosage> 
-      <h2>Dosage List for {context.currentAnimal.name}</h2>
+      <NewDosage getDosages={getDosages} animal={vitals} AnimalHandler={addDosageHandler}> </NewDosage> 
+      <h2>Dosage List for {vitals.name}</h2>
       <DosageList  dosages={dosages.dosages} editDosageHandler={editDosageHandler} deleteDosageHandler={removeDosageHandler}></DosageList>
     {/* <button onClick={showInfo}>Show Dosages for {context.currentAnimal.name}</button> */}
     <br/>
