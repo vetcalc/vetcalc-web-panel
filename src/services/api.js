@@ -1,11 +1,14 @@
 import axios from "axios";
-// import {serviceOptions} from "./services"
+
+const e = process.env;
+const API_KEY = e.REACT_APP_API_KEY;
+const TLD = e.REACT_APP_TLD;
 
 const api = axios.create({
-  baseURL: "https://vaddb.liamgombart.com/",
+  baseURL: TLD,
   headers: {
     "Content-Type": "application/json",
-    "Authentication": "simian_army_makes_chaos",
+    "Authentication": API_KEY,
     "Accept": "application/json"
   }, 
 });

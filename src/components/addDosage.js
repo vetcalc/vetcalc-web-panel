@@ -1,18 +1,12 @@
 import { React, useState } from "react";
 import { Component } from "react";
-import { useParams } from 'react-router-dom';
 import { Dropdown, Form, Input } from "semantic-ui-react";
 import api from "../services/api";
-import axios from 'axios';
-import { getValue } from "@testing-library/user-event/dist/utils";
-import DosageTable from "./DosageTable";
 import { AnimalContext } from "../context/animal_context";
 import processDosages from "../services/deref";
 
-const dosageUri = `https://vaddb.liamgombart.com/dosages`
+const dosageUri = `${process.env.REACT_APP_TLD}/dosages`
 const API_KEY = process.env.REACT_APP_API_KEY;
-var drugId2 = 0;
-var doseId2 = 0;
 
 var drugIdState = 0;
 var dosageIdState = 0;
@@ -29,11 +23,6 @@ class AddDrug extends Component {
     console.log(animal_id);
     const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
     this.setState({ dosages: newDosages });
-    // setDosages({
-    //   ...dosages, 
-    //   dosages: newDosages,
-
-    // });
   }
 
   state = {
@@ -207,12 +196,6 @@ class AddDrug extends Component {
 
   // Retrieve data from DB using Axios
   async componentDidMount() {
-    // const animal_id = this.context.currentAnimal;
-    // console.log(animal_id);
-    // const newDosages = await processDosages(`${dosageUri}?animal_id=${animal_id}`);
-    // this.setState({dosages:newDosages});
-    // console.log(newDosages);
-
     // Get unit information
     api.get('/units')
       .then(response => {
@@ -243,8 +226,6 @@ class AddDrug extends Component {
       .catch(error => {
         console.error("Error: cannot receive drug data from DB")
       });
-    // this.getDosage();
-
   }
 
   render() {
@@ -274,14 +255,6 @@ class AddDrug extends Component {
               value={this.state.methodUnitId}
               onChange={this.handleDropdownChangeMethod}
             />
-            {/* //     control={Input}
-                    //     name="method"
-                    //     label="Method"
-                    //     placeholder="Method"
-                    //     className="right aligned"
-                    //     value={this.state.method}
-                    //     onChange={(e) => this.setState({ method: e.target.value })}
-                    //  */}
           </Form.Group>
 
           <Form.Group>
